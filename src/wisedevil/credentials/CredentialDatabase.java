@@ -55,7 +55,11 @@ public class CredentialDatabase implements Observer {
 	 * @return True if the value is successfully added to the database
 	 */
 	public boolean add(Credential value) {
-		return credentials.add(value);
+		boolean res = credentials.add(value);
+		
+		value.addObserver(this);
+		
+		return res;
 	}
 	
 	/**
@@ -66,7 +70,11 @@ public class CredentialDatabase implements Observer {
 	 * @return True if the value is successfully added to the database
 	 */
 	public boolean add(Keyring value) {
-		return keyrings.add(value);
+		boolean res = keyrings.add(value);
+		
+		value.addObserver(this);
+		
+		return res;
 	}
 	
 	/**
@@ -77,7 +85,11 @@ public class CredentialDatabase implements Observer {
 	 * @return True if the value is successfully removed from the database
 	 */
 	public boolean remove(Credential value) {
-		return credentials.remove(value);
+		boolean res = credentials.remove(value);
+		
+		value.deleteObserver(this);
+		
+		return res;
 	}
 	
 	/**
@@ -88,7 +100,11 @@ public class CredentialDatabase implements Observer {
 	 * @return True if the value is successfully removed from the database
 	 */
 	public boolean remove(Keyring value) {
-		return keyrings.remove(value);
+		boolean res = keyrings.remove(value);
+		
+		value.deleteObserver(this);
+		
+		return res;
 	}
 	
 	/**
