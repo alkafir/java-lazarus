@@ -1,4 +1,6 @@
 dist/**
+meta/**
+test/bin/**
 *.jar
 *.class
 
