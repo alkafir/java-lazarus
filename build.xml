@@ -3,6 +3,7 @@
 	
 	<property name="author.name" value="Alfredo Mungo" />
 	
+	<property name="project.name" value="${ant.project.name}" />
 	<property name="project.version.major" value="0" />
 	<property name="project.version.minor" value="0" />
 	<property name="project.version.patch" value="0" />
@@ -16,11 +17,17 @@
 	<property name="dir.bin" location="bin/" />
 	<property name="dir.meta" location="meta/" />
 	<property name="dir.dist" location="dist/" />
+	<property name="dir.lib" location="lib/" />
+	<property name="dir.test" location="test/" />
+	<property name="dir.test.src" location="${dir.test}/src" />
+	<property name="dir.test.bin" location="${dir.test}/bin" />
 	
 	<property name="file.manifest" location="${dir.meta}/MANIFEST.MF" />
 	<property name="file.jar.noext" location="${dir.dist}/${project.name}-${project.version-short}" />
 	<property name="file.jar-release" location="${file.jar.noext}.jar" />
 	<property name="file.jar-debug" location="${file.jar.noext}-debug.jar" />
+	<property name="file.testlib" location="${dir.lib}/test-lib.jar" />
+	<property name="file.testbuild" location="${dir.test}/build.xml" />
 	
 	<target name="init" description="Initializes the build environment">
 		<condition property="file.jar" value="${file.jar-release}" else="${file.jar-debug}">
@@ -30,6 +37,8 @@
 		<mkdir dir="${dir.bin}" />
 		<mkdir dir="${dir.meta}" />
 		<mkdir dir="${dir.dist}" />
+		<mkdir dir="${dir.lib}" />
+		<mkdir dir="${dir.test.bin}" />
 	</target>
 	
 	<!-- Notifies the user that the project is building in debug mode -->
@@ -70,7 +79,9 @@
 			debug="false"
 			deprecation="false"
 			includeAntRuntime="false"
-		/>
+		>
+			<compilerarg value="-X:lint" />
+		</javac>
 	</target>
 	
 	<target name="jar" depends="init, compile, manifest" description="Builds the jar file">
@@ -85,9 +96,26 @@
 	<target name="clean" description="Cleans the build environment" depends="distclean">
 		<delete dir="${dir.bin}" />
 		<delete dir="${dir.meta}" />
+		<delete dir="${dir.test.bin}" />
 	</target>
 	
 	<target name="distclean" description="Cleans the distribution files">
 		<delete dir="${dir.dist}" />
+	</target>
+	
+	<target name="-testlib-download" depends="init">
+		<get
+			src="https://github.com/wisedevil/testsuit/releases/download/v2.0/testsuit-2.0.jar"
+			dest="${file.testlib}"
+			retries="3"
+			skipexisting="true"
+		/>
+	</target>
+	
+	<target name="test" depends="compile, -testlib-download" description="Runs the tests">
+		<ant
+			antfile="${file.testbuild}"
+			target="test"
+		/>
 	</target>
 </project>

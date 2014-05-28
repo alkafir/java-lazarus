@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- WARNING: This buildfile is not intended to be called directly -->
+<project name="lazarus-test" default="-error-message">
+	<taskdef name="runtests"
+		classname="wisedevil.ant.taskdefs.RunTests"
+		classpath="${file.testlib}"
+		onerror="fail"
+	/>
+	
+	<target name="test-compile" description="Compiles the tests">
+		<javac
+			srcdir="${dir.test.src}"
+			destdir="${dir.test.bin}"
+			debug="true"
+			classpath="${file.testlib}:${dir.bin}"
+			includeAntRuntime="false"
+		/>
+	</target>
+	
+	<target name="test" description="Run the tests" depends="test-compile">
+		<runtests classpath="${dir.bin}">
+			<fileset dir="${dir.test.bin}">
+				<include name="*.class" />
+			</fileset>
+		</runtests>
+	</target>
+	
+	<target name="-error-message">
+		<echo level="error" message="This buildfile is not intended to be called directly" />
+	</target>
+</project>
