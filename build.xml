@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="lazarus" default="" basedir=".">
+	
+	<property name="author.name" value="Alfredo Mungo" />
+	
+	<property name="project.version.major" value="0" />
+	<property name="project.version.minor" value="0" />
+	<property name="project.version.patch" value="0" />
+	<property name="project.version.phase" value="pre-alpha" />
+	<property name="project.version-shortest" value="${project.version.major}.${project.version.minor}" />
+	<property name="project.version-short" value="${project.version-shortest}.${project.version.patch}" />
+	<property name="project.version" value="${project.version-short}-${project.version.phase}" />
+	<property name="project.url" value="https://github.com/wisedevil/java-lazarus" />
+	
+	<property name="dir.src" location="src/" />
+	<property name="dir.bin" location="bin/" />
+	<property name="dir.meta" location="meta/" />
+	<property name="dir.dist" location="dist/" />
+	
+	<property name="file.manifest" location="${dir.meta}/MANIFEST.MF" />
+	<property name="file.jar.noext" location="${dir.dist}/${project.name}-${project.version-short}" />
+	<property name="file.jar-release" location="${file.jar.noext}.jar" />
+	<property name="file.jar-debug" location="${file.jar.noext}-debug.jar" />
+	
+	<target name="init" description="Initializes the build environment">
+		<condition property="file.jar" value="${file.jar-release}" else="${file.jar-debug}">
+			<isset property="build.release" />
+		</condition>
+	
+		<mkdir dir="${dir.bin}" />
+		<mkdir dir="${dir.meta}" />
+		<mkdir dir="${dir.dist}" />
+	</target>
+	
+	<!-- Notifies the user that the project is building in debug mode -->
+	<target name="-debug-notify" unless="build.release">
+		<echo level="info" message="DEBUG mode enabled" />
+	</target>
+	
+	<target name="release" description="Enables release mode">
+		<property name="build.release" value="true" />
+	</target>
+	
+	<target name="manifest" description="Creates the jar manifest file" depends="init">
+		<manifest file="${file.manifest}">
+			<attribute name="Implementation-Title" value="lazarus" />
+			<attribute name="Implementation-Version" value="${project.version-shortest}" />
+			<attribute name="Implementation-Vendor" value="${author.name}" />
+			<attribute name="Implementation-URL" value="${project.url}" />
+			<attribute name="Sealed" value="true" />
+		</manifest>
+	</target>
+	
+	<target name="compile" depends="init, -compile-debug, -compile-release" description="Compiles the java source files" />
+	
+	<target name="-compile-debug" unless="build.release" depends="-debug-notify">
+		<javac
+			srcdir="${dir.src}"
+			destdir="${dir.bin}"
+			debug="true"
+			deprecation="true"
+			includeAntRuntime="false"
+		/>
+	</target>
+	
+	<target name="-compile-release" if="build.release">
+		<javac
+			srcdir="${dir.src}"
+			destdir="${dir.bin}"
+			debug="false"
+			deprecation="false"
+			includeAntRuntime="false"
+		/>
+	</target>
+	
+	<target name="jar" depends="init, compile, manifest" description="Builds the jar file">
+		<jar
+			destfile="${file.jar-debug}"
+			basedir="${dir.bin}"
+			manifest="${file.manifest}"
+			index="true"
+		/>
+	</target>
+	
+	<target name="clean" description="Cleans the build environment" depends="distclean">
+		<delete dir="${dir.bin}" />
+		<delete dir="${dir.meta}" />
+	</target>
+	
+	<target name="distclean" description="Cleans the distribution files">
+		<delete dir="${dir.dist}" />
+	</target>
+</project>
