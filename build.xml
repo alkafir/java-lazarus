@@ -93,7 +93,7 @@
 		/>
 	</target>
 	
-	<target name="clean" description="Cleans the build environment" depends="distclean">
+	<target name="clean" description="Cleans the build environment" depends="distclean, testclean">
 		<delete dir="${dir.bin}" />
 		<delete dir="${dir.meta}" />
 		<delete dir="${dir.test.bin}" />
@@ -101,6 +101,13 @@
 	
 	<target name="distclean" description="Cleans the distribution files">
 		<delete dir="${dir.dist}" />
+	</target>
+	
+	<target name="testclean" description="Cleans the test environment">
+		<ant
+			antfile="${file.testbuild}"
+			target="clean"
+		/>
 	</target>
 	
 	<target name="-testlib-download" depends="init">

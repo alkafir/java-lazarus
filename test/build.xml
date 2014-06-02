@@ -25,6 +25,10 @@
 		</runtests>
 	</target>
 	
+	<target name="clean" description="Cleans the test environment">
+		<delete dir="${dir.test.bin}" />
+	</target>
+	
 	<target name="-error-message">
 		<echo level="error" message="This buildfile is not intended to be called directly" />
 	</target>
