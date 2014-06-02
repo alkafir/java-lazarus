@@ -79,6 +79,7 @@ public class Credential extends Observable implements Serializable {
 		setTitle(title);
 		setUser(user);
 		setPassword(pass);
+		setDescription(null);
 	}
 	
 	/**
