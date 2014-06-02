@@ -24,6 +24,7 @@ import javax.security.auth.DestroyFailedException;
  * This class contains text password information.
  */	
 public class TextPassword implements Password {
+	private static final long serialVersionUID = 0L;
 	/**
 	 * The password data.
 	 */
