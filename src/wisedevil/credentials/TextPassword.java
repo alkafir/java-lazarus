@@ -34,10 +34,12 @@ public class TextPassword implements Password {
 	 * Initializes a new instance of this class.
 	 *
 	 * @param pass The password
+	 *
+	 * @throws NullPointerException If <code>pass</code> is null
 	 */
-	public TextPassword(char[] pass) {
+	public TextPassword(char[] pass) throws NullPointerException {
 		if(pass == null)
-			pass = new char[0];
+			throw new NullPointerException("Null text password declared");
 		
 		data = pass;
 	}
