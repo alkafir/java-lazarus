@@ -60,4 +60,34 @@ public class CredentialDatabaseTests {
 			c1.setTitle(oldTitle);
 		}
 	}
+	
+	@Test
+	public void remove_test() {
+		final Credential c = new Credential("remove_test_credential");
+		final Keyring k = new Keyring("remove_test_keyring");
+		final long n = cd.getCredentialsStream().count();
+		final long nk = cd.getKeyringsStream().count();
+		
+		cd.add(c);
+		assert cd.getCredentialsStream().count() == (n + 1);
+		
+		cd.remove(c);
+		assert cd.getCredentialsStream().count() == n;
+		
+		cd.getCredentials().forEach(e -> {
+			if(e == c)
+				fail();
+		});
+		
+		cd.add(k);
+		assert cd.getKeyringsStream().count() == (nk + 1);
+		
+		cd.remove(k);
+		assert cd.getKeyringsStream().count() == nk;
+		
+		cd.getKeyrings().forEach(e -> {
+			if(e == k)
+				fail();
+		});
+	}
 }
