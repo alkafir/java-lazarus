@@ -57,6 +57,7 @@ public class Keyring extends Observable implements IKeyring {
 	public Keyring(String title) throws NullPointerException, IllegalArgumentException {
 		keys = new LinkedHashSet<Credential>();
 		setTitle(title);
+		setDescription(null);
 	}
 	
 	/**
