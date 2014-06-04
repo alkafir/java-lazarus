@@ -17,12 +17,14 @@
  */
 package wisedevil.credentials.export;
 
+import javax.security.auth.Destroyable;
+
 /**
  * This interface provides support for credentials exporters.
  * <p>A credential exporter is a class whose goal is to export the whole
  * credential database in a particular format.</p>
  */
-public interface Exporter<T> {
+public interface Exporter<T> extends Destroyable {
 	/**
 	 * Exports the credentials.
 	 *
