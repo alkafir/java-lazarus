@@ -17,7 +17,16 @@
  */
 package wisedevil.credentials.export;
 
+import java.nio.charset.Charset;
+import java.nio.CharBuffer;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+
+import javax.security.auth.DestroyFailedException;
+
 import wisedevil.credentials.CredentialDatabase;
+import wisedevil.credentials.TextPassword;
 
 /**
  * This class provides support for exporting a CredentialDatabase as a
@@ -30,26 +39,66 @@ public class WDCExporter implements Exporter<byte[]> {
 	private final CredentialDatabase db;
 	
 	/**
+	 * The export password to encrypt the database.
+	 */
+	private final TextPassword pass;
+	
+	/**
 	 * Initializes a new instance of this class.
 	 *
 	 * @param db The CredentialDatabase to export
+	 * @param pass The password that will be used to encrypt the database
 	 *
 	 * @throws NullPointerException If <code>db</code> is null
 	 */
-	public WDCExporter(CredentialDatabase db) throws NullPointerException {
-		if(db == null)
+	public WDCExporter(CredentialDatabase db, TextPassword pass) throws NullPointerException {
+		if(db == null || pass == null)
 			throw new NullPointerException();
 			
 		this.db = db;
+		this.pass = pass;
 	}
 	
 	/**
 	 * Exports the credentials.
 	 *
 	 * @return The exported credentials in WDC format
+	 *
 	 * @throws CredentialsExportException if an exception occurs during the process
 	 */
 	public byte[] export() throws CredentialsExportException {
+		byte[] passBytes;
+		
+		// TextPassword -> byte[24]
+		try {
+			passBytes = Arrays.copyOf(passToDigest(), 24);
+		} catch(Exception e) {
+			e.printStackTrace();
+			throw new CredentialsExportException(e);
+		}
+		
 		return null;
+	}
+	
+	public void destroy() throws DestroyFailedException {
+		pass.destroy();
+	}
+	
+	public boolean isDestroyed() { return pass.isDestroyed(); }
+	
+	/**
+	 * Returns an SHA-256 digest of the database encryption password.
+	 *
+	 * @return The database encryption password digest
+	 *
+	 * @throws NoSuchAlgorithmException If the platform doesn't support SHA-256
+	 */
+	private byte[] passToDigest() throws NoSuchAlgorithmException {
+		// FIXME: Enhance security for this method
+		Charset cs = Charset.forName("UTF-8");
+		MessageDigest md = MessageDigest.getInstance("SHA-256");
+		byte[] bpass = cs.encode(CharBuffer.wrap(pass.get())).array();
+		
+		return md.digest(bpass);
 	}
 }
