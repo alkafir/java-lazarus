@@ -112,7 +112,7 @@
 	
 	<target name="-testlib-download" depends="init">
 		<get
-			src="https://github.com/wisedevil/testsuit/releases/download/v2.0/testsuit-2.0.jar"
+			src="https://github.com/wisedevil/java-testsuit/releases/download/v2.1.0/testsuit-2.1.0.jar"
 			dest="${file.testlib}"
 			retries="3"
 			skipexisting="true"
