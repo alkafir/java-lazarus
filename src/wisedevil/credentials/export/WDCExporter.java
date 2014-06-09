@@ -64,9 +64,9 @@ public class WDCExporter implements Exporter<byte[]> {
 	 *
 	 * @return The exported credentials in WDC format
 	 *
-	 * @throws CredentialsExportException if an exception occurs during the process
+	 * @throws DatabaseExportException if an exception occurs during the process
 	 */
-	public byte[] export() throws CredentialsExportException {
+	public byte[] export() throws DatabaseExportException {
 		byte[] passBytes;
 		
 		// TextPassword -> byte[24]
@@ -74,7 +74,7 @@ public class WDCExporter implements Exporter<byte[]> {
 			passBytes = Arrays.copyOf(passToDigest(), 24);
 		} catch(Exception e) {
 			e.printStackTrace();
-			throw new CredentialsExportException(e);
+			throw new DatabaseExportException(e);
 		}
 		
 		return null;

@@ -21,26 +21,26 @@ package wisedevil.credentials.export;
  * This exception is thrown during the credential export process if
  * an exception occurs.
  */
-public class CredentialsExportException extends Exception {
+public class DatabaseExportException extends Exception {
 	private static final long serialVersionUID = 0L;
 	
-	public CredentialsExportException() {
+	public DatabaseExportException() {
 		super();
 	}
 	
-	public CredentialsExportException(String message) {
+	public DatabaseExportException(String message) {
 		super(message);
 	}
 	
-	public CredentialsExportException(String message, Throwable cause) {
+	public DatabaseExportException(String message, Throwable cause) {
 		super(message, cause);
 	}
 	
-	public CredentialsExportException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+	public DatabaseExportException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 	}
 	
-	public CredentialsExportException(Throwable cause) {
+	public DatabaseExportException(Throwable cause) {
 		super(cause);
 	}
 }

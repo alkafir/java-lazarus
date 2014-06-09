@@ -29,7 +29,7 @@ public interface Exporter<T> extends Destroyable {
 	 * Exports the credentials.
 	 *
 	 * @return The exported credentials
-	 * @throws CredentialsExportException if an exception occurs during the process
+	 * @throws DatabaseExportException if an exception occurs during the process
 	 */
-	T export() throws CredentialsExportException;
+	T export() throws DatabaseExportException;
 }
