@@ -95,7 +95,7 @@ public class WDCExporter implements Exporter<byte[]> {
 	 */
 	private byte[] passToDigest() throws NoSuchAlgorithmException {
 		// FIXME: Enhance security for this method
-		Charset cs = Charset.forName("UTF-8");
+		Charset cs = Charset.forName("ASCII");
 		MessageDigest md = MessageDigest.getInstance("SHA-256");
 		byte[] bpass = cs.encode(CharBuffer.wrap(pass.get())).array();
 		
