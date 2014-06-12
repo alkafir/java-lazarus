@@ -17,7 +17,6 @@
  */
 package wisedevil.credentials;
 
-import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.LinkedHashSet;

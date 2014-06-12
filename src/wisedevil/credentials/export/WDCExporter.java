@@ -17,11 +17,18 @@
  */
 package wisedevil.credentials.export;
 
-import java.nio.charset.Charset;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+
+import java.nio.charset.Charset;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
 import java.util.Arrays;
 
 import javax.security.auth.DestroyFailedException;
@@ -69,13 +76,18 @@ public class WDCExporter implements Exporter<byte[]> {
 	 */
 	public byte[] export() throws DatabaseExportException {
 		byte[] passBytes;
+		byte[] dataBytes = null;
 		
 		// TextPassword -> byte[24]
 		try {
 			passBytes = Arrays.copyOf(passToDigest(), 24);
+			dataBytes = serializeDatabase();
 		} catch(Exception e) {
 			e.printStackTrace();
 			throw new DatabaseExportException(e);
+		} finally {
+			if(dataBytes != null)
+				Arrays.fill(dataBytes, (byte)0);
 		}
 		
 		return null;
@@ -103,5 +115,21 @@ public class WDCExporter implements Exporter<byte[]> {
 		byte[] bpass = Arrays.copyOf(bbuf.array(), bbuf.remaining());
 		
 		return md.digest(bpass);
+	}
+	
+	/**
+	 * Serializes the credential database as a byte array.
+	 *
+	 * @return The serialized credential database
+	 *
+	 * @throws IOException If an output exception occurs during the serialization process
+	 */
+	private byte[] serializeDatabase() throws IOException {
+		ByteArrayOutputStream bs = new ByteArrayOutputStream();
+		ObjectOutputStream os = new ObjectOutputStream(bs);
+		
+		os.writeObject(db);
+		
+		return bs.toByteArray();
 	}
 }

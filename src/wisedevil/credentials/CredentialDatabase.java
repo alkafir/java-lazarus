@@ -20,7 +20,6 @@ package wisedevil.credentials;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Observable;
-import java.util.Observer;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -28,7 +27,7 @@ import java.util.stream.Stream;
  * This class provide a facility for maintaining
  * a database of credentials and keyrings.
  */
-public class CredentialDatabase implements Observer {
+public class CredentialDatabase implements ICredentialDatabase {
 	/**
 	 * The credentials.
 	 */

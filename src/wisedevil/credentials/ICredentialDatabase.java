@@ -18,10 +18,11 @@
 package wisedevil.credentials;
 
 import java.io.Serializable;
+import java.util.Observer;
 
 /**
- * Interface for the Keyring class.
+ * Interface for the CredentialDatabase class.
  *
- * @see Keyring
+ * @see CredentialDatabase
  */
-public interface IKeyring extends Serializable, Iterable {}
+public interface ICredentialDatabase extends Serializable, Observer {}
