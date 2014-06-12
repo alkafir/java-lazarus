@@ -18,6 +18,7 @@
 package wisedevil.credentials.export;
 
 import java.nio.charset.Charset;
+import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -88,6 +89,7 @@ public class WDCExporter implements Exporter<byte[]> {
 	
 	/**
 	 * Returns an SHA-256 digest of the database encryption password.
+	 * <blockquote>This algorithm performs an SHA-256 hash on a UTF-8 representation of the password.</blockquote>
 	 *
 	 * @return The database encryption password digest
 	 *
@@ -95,9 +97,10 @@ public class WDCExporter implements Exporter<byte[]> {
 	 */
 	private byte[] passToDigest() throws NoSuchAlgorithmException {
 		// FIXME: Enhance security for this method
-		Charset cs = Charset.forName("ASCII");
+		Charset cs = Charset.forName("UTF-8");
 		MessageDigest md = MessageDigest.getInstance("SHA-256");
-		byte[] bpass = cs.encode(CharBuffer.wrap(pass.get())).array();
+		ByteBuffer bbuf = cs.encode(CharBuffer.wrap(pass.get()));
+		byte[] bpass = Arrays.copyOf(bbuf.array(), bbuf.remaining());
 		
 		return md.digest(bpass);
 	}
