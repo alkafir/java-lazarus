@@ -4,4 +4,4 @@ test/bin/**
 lib/**
 *.jar
 *.class
-
+*.swp
