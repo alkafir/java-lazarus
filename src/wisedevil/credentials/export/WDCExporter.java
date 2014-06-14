@@ -26,10 +26,26 @@ import java.nio.CharBuffer;
 
 import java.nio.charset.Charset;
 
+import java.security.AlgorithmParameters;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.InvalidParameterException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+
+import java.security.spec.InvalidParameterSpecException;
 
 import java.util.Arrays;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+
+import javax.crypto.spec.SecretKeySpec;
+import javax.crypto.spec.IvParameterSpec;
 
 import javax.security.auth.DestroyFailedException;
 
@@ -140,8 +156,41 @@ public class WDCExporter implements Exporter<byte[]> {
 	 * @param pass The encryption password
 	 *
 	 * @return The encrypted database
+	 *
+	 * @see https://gist.github.com/wisedevil/47fd55226a7a4cbcf4c6
 	 */
-	private static byte[] encryptDatabase(byte[] data, byte[] pass) {
-		return null;
+	private static byte[] encryptDatabase(byte[] data, byte[] pass)
+		throws	NoSuchAlgorithmException,
+			NoSuchPaddingException,
+			InvalidKeyException,
+			InvalidParameterException,
+			InvalidParameterSpecException,
+			InvalidAlgorithmParameterException,
+			IllegalBlockSizeException,
+			BadPaddingException {
+		byte[] iv = new byte[16];
+		Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
+		SecureRandom rnd = new SecureRandom();
+		SecretKey seckey = new SecretKeySpec(pass, 0, pass.length, "AES");
+		AlgorithmParameters parms = AlgorithmParameters.getInstance("AES");
+
+		// Init
+		rnd.nextBytes(iv);
+		parms.init(new IvParameterSpec(iv));
+		c.init(Cipher.ENCRYPT_MODE, seckey, parms);
+
+		// Encrypt
+		byte[] res = c.doFinal(data);
+
+		// Append IV
+		byte[] out = new byte[res.length + iv.length];
+		
+		for(int i = 0; i < iv.length; i++)
+			out[i] = iv[i];
+
+		for(int i = 0; i < res.length; i++)
+			out[iv.length + i] = res[i];
+
+		return out;
 	}
 }
