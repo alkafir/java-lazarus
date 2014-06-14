@@ -4,7 +4,7 @@
 	<taskdef name="runtests"
 		classname="wisedevil.ant.taskdefs.RunTests"
 		classpath="${file.testlib}"
-		onerror="fail"
+		onerror="report"
 	/>
 	
 	<target name="test-compile" description="Compiles the tests">
