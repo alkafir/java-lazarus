@@ -80,7 +80,7 @@ public class WDCExporter implements Exporter<byte[]> {
 		
 		// TextPassword -> byte[24]
 		try {
-			passBytes = Arrays.copyOf(passToDigest(), 24);
+			passBytes = passToDigest();
 			dataBytes = serializeDatabase();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -100,17 +100,17 @@ public class WDCExporter implements Exporter<byte[]> {
 	public boolean isDestroyed() { return pass.isDestroyed(); }
 	
 	/**
-	 * Returns an SHA-256 digest of the database encryption password.
-	 * <blockquote>This algorithm performs an SHA-256 hash on a UTF-8 representation of the password.</blockquote>
+	 * Returns an MD-5 digest of the database encryption password.
+	 * <blockquote>This algorithm performs an MD-5 hash on a UTF-8 representation of the password.</blockquote>
 	 *
 	 * @return The database encryption password digest
 	 *
-	 * @throws NoSuchAlgorithmException If the platform doesn't support SHA-256
+	 * @throws NoSuchAlgorithmException If the platform doesn't support MD-5
 	 */
 	private byte[] passToDigest() throws NoSuchAlgorithmException {
 		// FIXME: Enhance security for this method
 		Charset cs = Charset.forName("UTF-8");
-		MessageDigest md = MessageDigest.getInstance("SHA-256");
+		MessageDigest md = MessageDigest.getInstance("MD5");
 		ByteBuffer bbuf = cs.encode(CharBuffer.wrap(pass.get()));
 		byte[] bpass = Arrays.copyOf(bbuf.array(), bbuf.remaining());
 		
@@ -131,5 +131,17 @@ public class WDCExporter implements Exporter<byte[]> {
 		os.writeObject(db);
 		
 		return bs.toByteArray();
+	}
+	
+	/**
+	 * Encrypts the database data.
+	 *
+	 * @param data The plain data to be encrypted
+	 * @param pass The encryption password
+	 *
+	 * @return The encrypted database
+	 */
+	private static byte[] encryptDatabase(byte[] data, byte[] pass) {
+		return null;
 	}
 }

@@ -52,11 +52,11 @@ public class WDCExportTests {
 	public void password_digest_test() {
 		final TextPassword pass = new TextPassword("this is a test password".toCharArray());
 		final WDCExporter wdc = new WDCExporter(cd, pass);
-		byte[] passHash = generateHash("9d96ebdd11f9b46ee69ed015d10356d52cb39dd767d39f43797cb778cbee09b6");
+		byte[] passHash = generateHash("f1112a8ccc35a8aa87c57c237cd12c9b");
 		MethodInspector<byte[]> passToDigest = new MethodInspector<byte[]>(wdc, "passToDigest");
 		
 		try {
-			assert Arrays.equals(passHash, Arrays.copyOf(passToDigest.invoke(), 24)): printHash(passHash) + " " + printHash(Arrays.copyOf(passToDigest.invoke(), 24));
+			assert Arrays.equals(passHash, Arrays.copyOf(passToDigest.invoke(), 16)): printHash(passHash) + " " + printHash(Arrays.copyOf(passToDigest.invoke(), 16));
 		} catch(InvocationTargetException e) {
 			e.printStackTrace();
 			fail("Exception thrown in passToDigest() method");
@@ -64,12 +64,14 @@ public class WDCExportTests {
 	}
 	
 	private byte[] generateHash(String hash) {
+		final int hash_size = 16;
+
 		char[] chash = hash.toUpperCase().toCharArray();
-		byte[] res = new byte[24];
+		byte[] res = new byte[hash_size];
 		byte b = 0;
 		int j = 0;
 		
-		for(int i = 0; i < 48; i++) {
+		for(int i = 0; i < hash_size * 2; i++) {
 			if(i % 2 == 0)
 				b = 0;
 			
