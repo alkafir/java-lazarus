@@ -150,7 +150,7 @@ public class WDCExporter implements Exporter<byte[]> {
 	}
 	
 	/**
-	 * Encrypts the database data.
+	 * Encrypts the database using AES/CBC/PKCS5Padding with SecureRandom generated IV.
 	 *
 	 * @param data The plain data to be encrypted
 	 * @param pass The encryption password
