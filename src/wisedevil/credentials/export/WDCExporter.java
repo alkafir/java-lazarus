@@ -52,7 +52,7 @@ import static wisedevil.credentials.export.internal.WDCUtil.passToDigest;
  * This class provides support for exporting a CredentialDatabase as a
  * "WiseDevil Credentials" file format.
  */
-public class WDCExporter implements Exporter<byte[]> {
+public class WDCExporter implements Exporter<WDCEncryptionRecord> {
 	/**
 	 * The CredentialDatabase to export.
 	 */
@@ -86,14 +86,17 @@ public class WDCExporter implements Exporter<byte[]> {
 	 *
 	 * @throws DatabaseExportException if an exception occurs during the process
 	 */
-	public byte[] export() throws DatabaseExportException {
+	public WDCEncryptionRecord export() throws DatabaseExportException {
 		byte[] passBytes;
 		byte[] dataBytes = null;
+		WDCEncryptionRecord encData;
 		
 		// TextPassword -> byte[24]
 		try {
 			passBytes = passToDigest(pass.get());
 			dataBytes = serializeDatabase();
+			encData = encryptDatabase(dataBytes, passBytes);
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 			throw new DatabaseExportException(e);
@@ -133,11 +136,11 @@ public class WDCExporter implements Exporter<byte[]> {
 	 * @param data The plain data to be encrypted
 	 * @param pass The encryption password
 	 *
-	 * @return The encrypted database
+	 * @return The encrypted database and relative IV as a {@link WDCEncryptionRecord} object
 	 *
 	 * @see https://gist.github.com/wisedevil/47fd55226a7a4cbcf4c6
 	 */
-	private static byte[] encryptDatabase(byte[] data, byte[] pass)
+	private static WDCEncryptionRecord encryptDatabase(byte[] data, byte[] pass)
 		throws	NoSuchAlgorithmException,
 			NoSuchPaddingException,
 			InvalidKeyException,
@@ -160,15 +163,6 @@ public class WDCExporter implements Exporter<byte[]> {
 		// Encrypt
 		byte[] res = c.doFinal(data);
 
-		// Append IV
-		byte[] out = new byte[res.length + iv.length];
-		
-		for(int i = 0; i < iv.length; i++)
-			out[i] = iv[i];
-
-		for(int i = 0; i < res.length; i++)
-			out[iv.length + i] = res[i];
-
-		return out;
+		return new WDCEncryptionRecord(res, iv);
 	}
 }
