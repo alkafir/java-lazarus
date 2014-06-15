@@ -15,6 +15,8 @@ import wisedevil.credentials.TextPassword;
 import wisedevil.credentials.export.WDCExporter;
 import wisedevil.credentials.export.DatabaseExportException;
 
+import static wisedevil.credentials.export.internal.WDCUtil.passToDigest;
+
 @Name("WDCExport test case")
 @Description("Tests for the WDC export feature")
 @ResultManager(ConsoleResultManager.class)
@@ -53,13 +55,12 @@ public class WDCExportTests {
 		final TextPassword pass = new TextPassword("this is a test password".toCharArray());
 		final WDCExporter wdc = new WDCExporter(cd, pass);
 		byte[] passHash = generateHash("f1112a8ccc35a8aa87c57c237cd12c9b");
-		MethodInspector<byte[]> passToDigest = new MethodInspector<byte[]>(wdc, "passToDigest");
 		
 		try {
-			assert Arrays.equals(passHash, Arrays.copyOf(passToDigest.invoke(), 16)): printHash(passHash) + " " + printHash(Arrays.copyOf(passToDigest.invoke(), 16));
-		} catch(InvocationTargetException e) {
+			assert Arrays.equals(passHash, Arrays.copyOf(passToDigest(pass.get()), 16)): printHash(passHash) + " " + printHash(Arrays.copyOf(passToDigest(pass.get()), 16));
+		} catch(NoSuchAlgorithmException e) {
 			e.printStackTrace();
-			fail("Exception thrown in passToDigest() method");
+			fail("NoSuchAlgorithmException thrown in passToDigest() method");
 		}
 	}
 	

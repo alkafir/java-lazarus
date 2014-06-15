@@ -21,16 +21,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-
-import java.nio.charset.Charset;
-
 import java.security.AlgorithmParameters;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.InvalidParameterException;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
@@ -51,6 +45,8 @@ import javax.security.auth.DestroyFailedException;
 
 import wisedevil.credentials.CredentialDatabase;
 import wisedevil.credentials.TextPassword;
+
+import static wisedevil.credentials.export.internal.WDCUtil.passToDigest;
 
 /**
  * This class provides support for exporting a CredentialDatabase as a
@@ -96,7 +92,7 @@ public class WDCExporter implements Exporter<byte[]> {
 		
 		// TextPassword -> byte[24]
 		try {
-			passBytes = passToDigest();
+			passBytes = passToDigest(pass.get());
 			dataBytes = serializeDatabase();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -114,25 +110,7 @@ public class WDCExporter implements Exporter<byte[]> {
 	}
 	
 	public boolean isDestroyed() { return pass.isDestroyed(); }
-	
-	/**
-	 * Returns an MD-5 digest of the database encryption password.
-	 * <blockquote>This algorithm performs an MD-5 hash on a UTF-8 representation of the password.</blockquote>
-	 *
-	 * @return The database encryption password digest
-	 *
-	 * @throws NoSuchAlgorithmException If the platform doesn't support MD-5
-	 */
-	private byte[] passToDigest() throws NoSuchAlgorithmException {
-		// FIXME: Enhance security for this method
-		Charset cs = Charset.forName("UTF-8");
-		MessageDigest md = MessageDigest.getInstance("MD5");
-		ByteBuffer bbuf = cs.encode(CharBuffer.wrap(pass.get()));
-		byte[] bpass = Arrays.copyOf(bbuf.array(), bbuf.remaining());
-		
-		return md.digest(bpass);
-	}
-	
+
 	/**
 	 * Serializes the credential database as a byte array.
 	 *
