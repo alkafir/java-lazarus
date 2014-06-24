@@ -18,7 +18,9 @@
 package wisedevil.credentials.export;
 
 /**
- * Result class for the encryptDatabase() method.
+ * WDC encryption output and decryption input data.
+ *
+ * @see WDCExporter
  */
 public class WDCEncryptionRecord {
 	private final byte[] data, iv;
