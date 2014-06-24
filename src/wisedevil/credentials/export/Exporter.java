@@ -31,5 +31,5 @@ public interface Exporter<T> extends Destroyable {
 	 * @return The exported credentials
 	 * @throws DatabaseExportException if an exception occurs during the process
 	 */
-	T export() throws DatabaseExportException;
+	T exportDatabase() throws DatabaseExportException;
 }
