@@ -86,12 +86,11 @@ public class WDCExporter implements Exporter<WDCEncryptionRecord> {
 	 *
 	 * @throws DatabaseExportException if an exception occurs during the process
 	 */
-	public WDCEncryptionRecord export() throws DatabaseExportException {
-		byte[] passBytes;
+	public WDCEncryptionRecord exportDatabase() throws DatabaseExportException {
+		byte[] passBytes = null;
 		byte[] dataBytes = null;
 		WDCEncryptionRecord encData;
 		
-		// TextPassword -> byte[24]
 		try {
 			passBytes = passToDigest(pass.get());
 			dataBytes = serializeDatabase();
@@ -103,6 +102,9 @@ public class WDCExporter implements Exporter<WDCEncryptionRecord> {
 		} finally {
 			if(dataBytes != null)
 				Arrays.fill(dataBytes, (byte)0);
+				
+			if(passBytes != null)
+				Arrays.fill(passBytes, (byte)0);
 		}
 		
 		return null;
@@ -122,19 +124,21 @@ public class WDCExporter implements Exporter<WDCEncryptionRecord> {
 	 * @throws IOException If an output exception occurs during the serialization process
 	 */
 	private byte[] serializeDatabase() throws IOException {
-		ByteArrayOutputStream bs = new ByteArrayOutputStream();
-		ObjectOutputStream os = new ObjectOutputStream(bs);
-		
-		os.writeObject(db);
-		
-		return bs.toByteArray();
+		try (
+			ByteArrayOutputStream bs = new ByteArrayOutputStream();
+			ObjectOutputStream os = new ObjectOutputStream(bs);
+		) {
+			os.writeObject(db);
+			
+			return bs.toByteArray();
+		}
 	}
 	
 	/**
 	 * Encrypts the database using AES/CBC/PKCS5Padding with SecureRandom generated IV.
 	 *
 	 * @param data The plain data to be encrypted
-	 * @param pass The encryption password
+	 * @param pass The encryption password (hash)
 	 *
 	 * @return The encrypted database and relative IV as a {@link WDCEncryptionRecord} object
 	 *
