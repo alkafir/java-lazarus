@@ -101,7 +101,7 @@ public class WDCExportTests {
 	}
 	
 	@Test
-	public void encryption_test() {
+	public void encryption_exception_test() {
 		assertNoException(new Runnable() {
 			public void run() {
 				try {
