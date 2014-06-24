@@ -99,4 +99,19 @@ public class WDCExportTests {
 		
 		return res.toString();
 	}
+	
+	@Test
+	public void encryption_test() {
+		assertNoException(new Runnable() {
+			public void run() {
+				try {
+					WDCExporter exporter = new WDCExporter(cd, new TextPassword("hello".toCharArray()));
+					
+					exporter.exportDatabase();
+				} catch(DatabaseExportException e) {
+					fail("DatabaseExportException thrown");
+				}
+			}
+		});
+	}
 }
