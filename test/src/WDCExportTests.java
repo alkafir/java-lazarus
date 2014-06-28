@@ -127,6 +127,24 @@ public class WDCExportTests {
 			WDCImporter importer = new WDCImporter(rec, new TextPassword("hello".toCharArray()));
 
 			CredentialDatabase dbi = importer.importDatabase();
+			
+			{
+				boolean first, second, third;
+				
+				first = second = third = false;
+				
+				for(Credential c: dbi.getCredentials())
+					if(c.getTitle().equals("first"))
+						first = true;
+					else if(c.getTitle().equals("second"))
+						second = true;
+					else if(c.getTitle().equals("third"))
+						third = true;
+						
+				if(!(first && second && third))
+					fail("Unable to retrieve all the credentials from the decrypted database");
+			}
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 			fail();
