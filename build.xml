@@ -19,6 +19,7 @@
 	<property name="dir.dist" location="dist/" />
 	<property name="dir.lib" location="lib/" />
 	<property name="dir.test" location="test/" />
+	<property name="dir.doc" location="doc/" />
 	<property name="dir.test.src" location="${dir.test}/src" />
 	<property name="dir.test.bin" location="${dir.test}/bin" />
 	
@@ -29,6 +30,8 @@
 	<property name="file.testlib" location="${dir.lib}/test-lib.jar" />
 	<property name="file.testbuild" location="${dir.test}/build.xml" />
 	
+	<property name="javadoc.title">"<![CDATA[<header><h1>${project.name} ${project.version}</h1></header>]]>"</property>
+	
 	<target name="init" description="Initializes the build environment">
 		<condition property="file.jar" value="${file.jar-release}" else="${file.jar-debug}">
 			<isset property="build.release" />
@@ -38,6 +41,7 @@
 		<mkdir dir="${dir.meta}" />
 		<mkdir dir="${dir.dist}" />
 		<mkdir dir="${dir.lib}" />
+		<mkdir dir="${dir.doc}" />
 		<mkdir dir="${dir.test.bin}" />
 	</target>
 	
@@ -85,7 +89,7 @@
 		</javac>
 	</target>
 	
-	<target name="jar" depends="init, compile, manifest, -jar-debug, -jar-release" description="Builds the jar file" />
+	<target name="jar" depends="init, compile, manifest, javadoc, -jar-debug, -jar-release" description="Builds the jar file" />
 	
 	<target name="-jar-debug" unless="build.release">
 		<jar
@@ -106,9 +110,42 @@
 		/>
 	</target>
 	
+	<target name="javadoc" depends="init, -javadoc-debug, -javadoc-release" />
+	
+	<target name="-javadoc-debug" unless="build.release">
+		<javadoc
+			sourcepath="${dir.src}"
+			destdir="${dir.doc}"
+			access="private"
+			locale="en_US"
+			author="${author.name}"
+			failonerror="false"
+		>
+			<doctitle>${javadoc.title}</doctitle>
+			<package name="wisedevil.credentials.*" />
+			<link href="http://docs.oracle.com/javase/8/docs/api/" />
+		</javadoc>
+	</target>
+	
+	<target name="-javadoc-release" if="build.release">
+		<javadoc
+			sourcepath="${dir.src}"
+			destdir="${dir.doc}"
+			access="protected"
+			locale="en_US"
+			author="${author.name}"
+			failonerror="true"
+		>
+			<doctitle>${javadoc.title}</doctitle>
+			<package name="wisedevil.credentials.*" />
+			<link href="http://docs.oracle.com/javase/8/docs/api/" />
+		</javadoc>
+	</target>
+	
 	<target name="clean" description="Cleans the build environment" depends="distclean, testclean">
 		<delete dir="${dir.bin}" />
 		<delete dir="${dir.meta}" />
+		<delete dir="${dir.doc}" />
 		<delete dir="${dir.test.bin}" />
 	</target>
 	
