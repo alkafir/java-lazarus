@@ -12,7 +12,9 @@ import wisedevil.credentials.Credential;
 import wisedevil.credentials.Keyring;
 import wisedevil.credentials.CredentialDatabase;
 import wisedevil.credentials.TextPassword;
+import wisedevil.credentials.export.WDCEncryptionRecord;
 import wisedevil.credentials.export.WDCExporter;
+import wisedevil.credentials.export.WDCImporter;
 import wisedevil.credentials.export.DatabaseExportException;
 
 import static wisedevil.credentials.export.internal.WDCUtil.passToDigest;
@@ -114,4 +116,21 @@ public class WDCExportTests {
 			}
 		});
 	}
+
+	@Test
+	public void encryption_decryption_test() {
+		try {
+			WDCExporter exporter = new WDCExporter(cd, new TextPassword("hello".toCharArray()));
+			
+			WDCEncryptionRecord rec = exporter.exportDatabase();
+
+			WDCImporter importer = new WDCImporter(rec, new TextPassword("hello".toCharArray()));
+
+			CredentialDatabase dbi = importer.importDatabase();
+		} catch(Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+
 }
