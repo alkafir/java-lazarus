@@ -28,6 +28,9 @@ import java.util.stream.Stream;
  * This class provides a pooling facility for related credentials.
  */
 public class Keyring extends Observable implements IKeyring {
+	/**
+	 * Serialization version number.
+	 */
 	private static final long serialVersionUID = 0L;
 	
 	/**
@@ -40,7 +43,7 @@ public class Keyring extends Observable implements IKeyring {
 	 */
 	private String title;
 	
-	/*
+	/**
 	 * The credential description.
 	 */
 	private String description;
@@ -52,8 +55,13 @@ public class Keyring extends Observable implements IKeyring {
 	
 	/**
 	 * Initializes a new instance of this class.
+	 *
+	 * @param title The title of the keyring
+	 *
+	 * @throws NullPointerException if <code>value</code> is null.
+	 * @throws IllegalArgumentException if <code>value</code> is an empty string.
 	 */
-	public Keyring(String title) throws NullPointerException, IllegalArgumentException {
+	public Keyring(String title) {
 		keys = new LinkedHashSet<Credential>();
 		setTitle(title);
 		setDescription(null);
@@ -83,7 +91,7 @@ public class Keyring extends Observable implements IKeyring {
 	 * @throws NullPointerException if <code>value</code> is null.
 	 * @throws IllegalArgumentException if <code>value</code> is an empty string.
 	 */
-	public void setTitle(String value) throws NullPointerException, IllegalArgumentException {
+	public void setTitle(String value) {
 		if(value == null)
 			throw new NullPointerException("Keyring title cannot be null");
 		
@@ -150,6 +158,9 @@ public class Keyring extends Observable implements IKeyring {
 	 */
 	boolean isModified() { return modified; }
 	
+	/**
+	 * @see java.lang.Object#hashCode
+	 */
 	@Override
 	public int hashCode() {
 		return title.hashCode();
@@ -159,11 +170,16 @@ public class Keyring extends Observable implements IKeyring {
 		return keys.iterator();
 	}
 	
-	public Stream stream() {
+	/**
+	 * Returns a stream containing the keys of this keyring.
+	 *
+	 * @return A Stream object
+	 */
+	public Stream<Credential> stream() {
 		return keys.stream();
 	}
-	
-	public Spliterator spliterator() {
+
+	public Spliterator<Credential> spliterator() {
 		return keys.spliterator();
 	}
 }
