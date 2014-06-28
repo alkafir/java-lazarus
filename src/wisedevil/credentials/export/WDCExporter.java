@@ -96,6 +96,7 @@ public class WDCExporter implements Exporter<WDCEncryptionRecord> {
 			dataBytes = serializeDatabase();
 			encData = encryptDatabase(dataBytes, passBytes);
 			
+			return encData;
 		} catch(Exception e) {
 			e.printStackTrace();
 			throw new DatabaseExportException(e);
@@ -106,8 +107,6 @@ public class WDCExporter implements Exporter<WDCEncryptionRecord> {
 			if(passBytes != null)
 				Arrays.fill(passBytes, (byte)0);
 		}
-		
-		return null;
 	}
 	
 	public void destroy() throws DestroyFailedException {
