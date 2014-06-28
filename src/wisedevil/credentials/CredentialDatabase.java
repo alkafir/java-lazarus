@@ -29,6 +29,11 @@ import java.util.stream.Stream;
  */
 public class CredentialDatabase implements ICredentialDatabase {
 	/**
+	 * Serialization version number.
+	 */
+	private static final long serialVersionUID = 0L;
+	
+	/**
 	 * The credentials.
 	 */
 	private Set<Credential> credentials;
@@ -111,6 +116,8 @@ public class CredentialDatabase implements ICredentialDatabase {
 	 *
 	 * @param o The Observable record that has changed
 	 * @param arg The old value of the changed key
+	 *
+	 * @see java.util.Observer#update(Observable, Object)
 	 */
 	public void update(Observable o, Object arg) {
 		if(o instanceof Credential)
@@ -123,7 +130,7 @@ public class CredentialDatabase implements ICredentialDatabase {
 	 * This callback method is called whenever a Credential key in the database has changed.
 	 *
 	 * @param c The Credential record that has changed
-	 * @param arg The old value of the changed key
+	 * @param oldTitle The old value of the changed key
 	 */
 	private void updateCredentials(Credential c, String oldTitle) {
 		if(credentials.stream().filter(x -> x.getTitle() == c.getTitle()).count() > 1)
@@ -134,7 +141,7 @@ public class CredentialDatabase implements ICredentialDatabase {
 	 * This callback method is called whenever a Keyring key in the database has changed.
 	 *
 	 * @param c The Keyring record that has changed
-	 * @param arg The old value of the changed key
+	 * @param oldTitle The old value of the changed key
 	 */
 	private void updateKeyrings(Keyring c, String oldTitle) {
 		if(keyrings.stream().filter(x -> x.getTitle() == c.getTitle()).count() > 1)
@@ -176,7 +183,7 @@ public class CredentialDatabase implements ICredentialDatabase {
 	 *
 	 * @return A stream for the credentials of the dataabse
 	 */
-	public Stream getCredentialsStream() {
+	public Stream<Credential> getCredentialsStream() {
 		return credentials.stream();
 	}
 	
@@ -185,7 +192,7 @@ public class CredentialDatabase implements ICredentialDatabase {
 	 *
 	 * @return A stream for the keyrings of the dataabse
 	 */
-	public Stream getKeyringsStream() {
+	public Stream<Keyring> getKeyringsStream() {
 		return keyrings.stream();
 	}
 }
