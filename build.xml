@@ -27,6 +27,7 @@
 	<property name="file.jar.noext" location="${dir.dist}/${project.name}-${project.version-short}" />
 	<property name="file.jar-release" location="${file.jar.noext}.jar" />
 	<property name="file.jar-debug" location="${file.jar.noext}-debug.jar" />
+	<property name="file.docjar" location="${file.jar.noext}-docs.tar.gz" />
 	<property name="file.testlib" location="${dir.lib}/test-lib.jar" />
 	<property name="file.testbuild" location="${dir.test}/build.xml" />
 	
@@ -107,6 +108,12 @@
 			basedir="${dir.bin}"
 			manifest="${file.manifest}"
 			index="true"
+		/>
+		
+		<tar
+			destfile="${file.docjar}"
+			basedir="${dir.doc}"
+			compression="gzip"
 		/>
 	</target>
 	
