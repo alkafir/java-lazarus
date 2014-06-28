@@ -2,6 +2,7 @@ dist/**
 meta/**
 test/bin/**
 lib/**
+doc/**
 *.jar
 *.class
 *.swp
