@@ -119,10 +119,19 @@ public class WDCImporter implements Importer {
 	 *
 	 * @return The decrypted database as an array of bytes
 	 *
-	 * @see https://gist.github.com/wisedevil/47fd55226a7a4cbcf4c6
+	 * @throws NoSuchAlgorithmException If the platform doesn't support AES/CBC
+	 * @throws InvalidKeyException If the key is invalid
+	 * @throws InvalidParameterException If an algorithm method parameter is invalid
+	 * @throws InvalidParameterSpecException If an algorithm parameter spec is invalid
+	 * @throws NoSuchPaddingException If the platform doesn't support PKCS5Padding
+	 * @throws InvalidAlgorithmParameterException If an algorithm parameter is invalid
+	 * @throws IllegalBlockSizeException If the data block size is not correct
+	 * @throws BadPaddingException If the data is not properly padded
+	 *
+	 * @see <a href="https://gist.github.com/wisedevil/47fd55226a7a4cbcf4c6">Java AES CBC gist</a>
 	 */
 	private static byte[] decryptDatabase(WDCEncryptionRecord enc, byte[] pass)
-		throws	NoSuchAlgorithmException,
+		throws NoSuchAlgorithmException,
 			NoSuchPaddingException,
 			InvalidKeyException,
 			InvalidParameterException,
@@ -145,9 +154,12 @@ public class WDCImporter implements Importer {
 	/**
 	 * Deserializes the credential database.
 	 *
+	 * @param rawdb The database to deserialize as an array of bytes
+	 *
 	 * @return The deserialized credential database as a byte array
 	 *
 	 * @throws IOException If an output exception occurs during the deserialization process
+	 * @throws ClassNotFoundException If the deserialized object is not a CredentialDatabase object
 	 */
 	private static CredentialDatabase deserializeDatabase(byte[] rawdb) throws IOException, ClassNotFoundException {
 		try (

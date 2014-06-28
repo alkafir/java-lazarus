@@ -30,7 +30,7 @@ import java.util.Arrays;
 /**
  * Contains utilities for the WDC import/export classes.
  *
- * @see wisedevil.credentials.export.WDCExport
+ * @see wisedevil.credentials.export.WDCExporter
  */
 public class WDCUtil {
 	/**

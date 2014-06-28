@@ -71,7 +71,7 @@ public class WDCExporter implements Exporter<WDCEncryptionRecord> {
 	 *
 	 * @throws NullPointerException If <code>db</code> is null
 	 */
-	public WDCExporter(CredentialDatabase db, TextPassword pass) throws NullPointerException {
+	public WDCExporter(CredentialDatabase db, TextPassword pass) {
 		if(db == null || pass == null)
 			throw new NullPointerException();
 			
@@ -141,10 +141,19 @@ public class WDCExporter implements Exporter<WDCEncryptionRecord> {
 	 *
 	 * @return The encrypted database and relative IV as a {@link WDCEncryptionRecord} object
 	 *
-	 * @see https://gist.github.com/wisedevil/47fd55226a7a4cbcf4c6
+	 * @throws NoSuchAlgorithmException If the platform doesn't support AES/CBC
+	 * @throws InvalidKeyException If the key is invalid
+	 * @throws InvalidParameterException If an algorithm method parameter is invalid
+	 * @throws InvalidParameterSpecException If an algorithm parameter spec is invalid
+	 * @throws NoSuchPaddingException If the platform doesn't support PKCS5Padding
+	 * @throws InvalidAlgorithmParameterException If an algorithm parameter is invalid
+	 * @throws IllegalBlockSizeException If the data block size is not correct
+	 * @throws BadPaddingException If the data is not properly padded
+	 *
+	 * @see <a href="https://gist.github.com/wisedevil/47fd55226a7a4cbcf4c6">Java AES CBC gist</a>
 	 */
 	private static WDCEncryptionRecord encryptDatabase(byte[] data, byte[] pass)
-		throws	NoSuchAlgorithmException,
+		throws NoSuchAlgorithmException,
 			NoSuchPaddingException,
 			InvalidKeyException,
 			InvalidParameterException,

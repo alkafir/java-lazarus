@@ -23,15 +23,29 @@ package wisedevil.credentials.export;
  * @see WDCExporter
  */
 public class WDCEncryptionRecord {
-	private final byte[] data, iv;
+
+	/**
+	 * The encrypted data.
+	 */
+	private final byte[] data;
+	
+	/**
+	 * The AES encryption IV.
+	 */
+	private final byte[] iv;
 	
 	/**
 	 * Initializes a new instance of this class.
 	 *
 	 * @param data The encrypted data
 	 * @param iv The encryption IV
+	 *
+	 * @throws NullPointerException if any of the arguments is null
 	 */
 	public WDCEncryptionRecord(byte[] data, byte[] iv) {
+		if(data == null || iv == null)
+			throw new NullPointerException();
+		
 		this.data = data;
 		this.iv = iv;
 	}

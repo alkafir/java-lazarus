@@ -22,24 +22,54 @@ package wisedevil.credentials.export;
  * an exception occurs.
  */
 public class DatabaseImportException extends Exception {
+	/**
+	 * Serialization version number.
+	 */
 	private static final long serialVersionUID = 0L;
 	
+	/**
+	 * Initializes a new instance of this class.
+	 */
 	public DatabaseImportException() {
 		super();
 	}
 	
+	/**
+	 * Initializes a new instance of this class.
+	 *
+	 * @param message The message
+	 */
 	public DatabaseImportException(String message) {
 		super(message);
 	}
 	
+	/**
+	 * Initializes a new instance of this class.
+	 *
+	 * @param message The message
+	 * @param cause The cause
+	 */
 	public DatabaseImportException(String message, Throwable cause) {
 		super(message, cause);
 	}
 	
+	/**
+	 * Initializes a new instance of this class.
+	 *
+	 * @param message The message
+	 * @param cause The cause
+	 * @param enableSuppression whether or not suppression is enabled
+	 * @param writableStackTrace whether or not the stack trace should be writable
+	 */
 	public DatabaseImportException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 	}
 	
+	/**
+	 * Initializes a new instance of this class.
+	 *
+	 * @param cause The cause
+	 */
 	public DatabaseImportException(Throwable cause) {
 		super(cause);
 	}

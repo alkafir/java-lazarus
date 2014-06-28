@@ -24,4 +24,4 @@ import java.io.Serializable;
  *
  * @see Keyring
  */
-public interface IKeyring extends Serializable, Iterable {}
+public interface IKeyring extends Serializable, Iterable<Credential> {}

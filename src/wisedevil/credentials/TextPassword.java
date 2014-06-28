@@ -24,7 +24,11 @@ import javax.security.auth.DestroyFailedException;
  * This class contains text password information.
  */	
 public class TextPassword implements Password {
+	/**
+	 * Serialization version number.
+	 */
 	private static final long serialVersionUID = 0L;
+	
 	/**
 	 * The password data.
 	 */
@@ -37,7 +41,7 @@ public class TextPassword implements Password {
 	 *
 	 * @throws NullPointerException If <code>pass</code> is null
 	 */
-	public TextPassword(char[] pass) throws NullPointerException {
+	public TextPassword(char[] pass) {
 		if(pass == null)
 			throw new NullPointerException("Null text password declared");
 		
@@ -59,6 +63,11 @@ public class TextPassword implements Password {
 			
 			return Arrays.equals(data, p.data);
 		} else return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return Arrays.hashCode(data);
 	}
 	
 	public void destroy() throws DestroyFailedException {

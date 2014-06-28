@@ -26,6 +26,9 @@ import java.util.Observable;
  * @see Password
  */
 public class Credential extends Observable implements Serializable {
+	/**
+	 * Serialization version number.
+	 */
 	private static final long serialVersionUID = 0L;
 	
 	/**
@@ -33,7 +36,7 @@ public class Credential extends Observable implements Serializable {
 	 */
 	private String title;
 	
-	/*
+	/**
 	 * The credential description.
 	 */
 	private String description;
@@ -61,7 +64,7 @@ public class Credential extends Observable implements Serializable {
 	 * @throws NullPointerException if <code>title</code> is null.
 	 * @throws IllegalArgumentException if <code>title</code> is an empty string.
 	 */
-	public Credential(String title) throws NullPointerException, IllegalArgumentException {
+	public Credential(String title) {
 		setTitle(title);
 	}
 	
@@ -75,7 +78,7 @@ public class Credential extends Observable implements Serializable {
 	 * @throws NullPointerException if <code>title</code> is null.
 	 * @throws IllegalArgumentException if <code>title</code> is an empty string.
 	 */
-	public Credential(String title, String user, Password pass) throws NullPointerException, IllegalArgumentException {
+	public Credential(String title, String user, Password pass) {
 		setTitle(title);
 		setUser(user);
 		setPassword(pass);

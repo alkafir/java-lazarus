@@ -1,5 +1,4 @@
 /**
- * This package contains classes to store/retrieve encrypted credentials
- * from/to disk or memory.
+ * This package contains classes to manage encrypted credentials.
  */
 package wisedevil.credentials;
