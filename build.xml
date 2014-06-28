@@ -80,7 +80,8 @@
 			deprecation="false"
 			includeAntRuntime="false"
 		>
-			<compilerarg value="-X:lint" />
+			<compilerarg value="-Xlint:all" />
+			<compilerarg value="-Xdoclint:all" />
 		</javac>
 	</target>
 	
