@@ -4,10 +4,10 @@
 	<property name="author.name" value="Alfredo Mungo" />
 	
 	<property name="project.name" value="${ant.project.name}" />
-	<property name="project.version.major" value="0" />
+	<property name="project.version.major" value="1" />
 	<property name="project.version.minor" value="0" />
 	<property name="project.version.patch" value="0" />
-	<property name="project.version.phase" value="pre-alpha" />
+	<property name="project.version.phase" value="alpha" />
 	<property name="project.version-shortest" value="${project.version.major}.${project.version.minor}" />
 	<property name="project.version-short" value="${project.version-shortest}.${project.version.patch}" />
 	<property name="project.version" value="${project.version-short}-${project.version.phase}" />
@@ -85,9 +85,21 @@
 		</javac>
 	</target>
 	
-	<target name="jar" depends="init, compile, manifest" description="Builds the jar file">
+	<target name="jar" depends="init, compile, manifest, -jar-debug, -jar-release" description="Builds the jar file" />
+	
+	<target name="-jar-debug" unless="build.release">
 		<jar
 			destfile="${file.jar-debug}"
+			basedir="${dir.bin}"
+			manifest="${file.manifest}"
+			index="true"
+			compress="false"
+		/>
+	</target>
+	
+	<target name="-jar-release" if="build.release">
+		<jar
+			destfile="${file.jar-release}"
 			basedir="${dir.bin}"
 			manifest="${file.manifest}"
 			index="true"
